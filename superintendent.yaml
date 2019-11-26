@@ -1,0 +1,82 @@
+connectors:
+  - type: avro-schema-registry
+    name: "avro"
+    schemaRegistryUrl: "localhost:8081"
+    props:
+        - basic.auth.credentials.source=USER_INFO
+  - type: postgresql
+    name: "pg"
+    connection: "postgresql://[user[:password]@][netloc][:port][/dbname]"
+#  - type: elasticsearch
+#    name: "elastic-consolidated"
+#    address: "127.0.0.1:9300"
+#    props:
+#      - client.transport.sniff: true
+#      - cluster.name: "elasticsearch"
+  - type: kafka
+    name: "kafka"
+    brokers: "mykafka:9092,mykafka2:9092"
+    props:
+      - sasl.mechanism: PLAIN
+  - type: api
+    name: "delivery"
+    url: "https://myapi.local/delivery/${key}"
+    headers:
+      - X-API-Token: "admin"
+    format: json
+  - type: api
+    name: "quotation"
+    url: "https://myapi.local/quotation/${key}"
+    headers:
+      - X-API-Token: "admin"
+    format: json
+
+
+mappings:
+  - connector: "pg-staging"
+    table: "orders"
+    key: "id"
+    unique: true
+    columns:
+      - name: "created_by"
+        format: "datetime"
+      - name: "data"
+        format: "json"
+
+  - connector: "pg-staging"
+    masterData: true
+    table: "orders-events"
+    key: "order_id"
+    unique: false
+    columns:
+      - name: "event"
+        format: avro
+
+  - connector: "kafka"
+    topic: "customer-orders"
+    unique: false
+    value:
+      - format: avro
+        projection: ".data.state"
+
+  - connector: "kafka"
+    topic: "customer-orders-cdc"
+    unique: false
+    value:
+      - format: json
+        projection: ".payload.lsn"
+
+  - connector: "quotation"
+    waitForMasterData: true
+    subKeyPath: ".quotation.id"
+
+  - connector: "delivery"
+    waitForMasterData: true
+    subKeyPath: ".delivery.id"
+
+#  - connector: "elastic-consolidated"
+#    name: "consolidation"
+#    index: "orders"
+#    columns:
+#      - name: "_source"
+#        format: json
