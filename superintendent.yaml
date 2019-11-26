@@ -1,9 +1,13 @@
-connectors:
+format:
   - type: avro-schema-registry
     name: "avro"
     schemaRegistryUrl: "localhost:8081"
     props:
-        - basic.auth.credentials.source=USER_INFO
+      - basic.auth.credentials.source=USER_INFO
+  - type: json
+    name: "json"
+
+connectors:
   - type: postgresql
     name: "pg"
     connection: "postgresql://[user[:password]@][netloc][:port][/dbname]"

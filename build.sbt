@@ -51,6 +51,7 @@ lazy val root = (project in file("."))
       "io.circe" %% "circe-literal"                          % CirceVersion,
       "ch.qos.logback"                                       % "logback-classic" % LogbackVersion,
       "com.github.pureconfig" %% "pureconfig"                % "0.12.1",
+      "com.github.pureconfig" %% "pureconfig-yaml"           % "0.12.1",
       "eu.timepit" %% "refined-pureconfig"                   % "0.9.10",
       "com.softwaremill.tapir" %% "tapir-core"               % TapirVersion,
       "com.softwaremill.tapir" %% "tapir-http4s-server"      % TapirVersion,
