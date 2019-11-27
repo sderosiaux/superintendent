@@ -11,12 +11,12 @@ connectors:
   - type: postgresql
     name: "pg"
     connection: "postgresql://[user[:password]@][netloc][:port][/dbname]"
-#  - type: elasticsearch
-#    name: "elastic-consolidated"
-#    address: "127.0.0.1:9300"
-#    props:
-#      - client.transport.sniff: true
-#      - cluster.name: "elasticsearch"
+  #  - type: elasticsearch
+  #    name: "elastic-consolidated"
+  #    address: "127.0.0.1:9300"
+  #    props:
+  #      - client.transport.sniff: true
+  #      - cluster.name: "elasticsearch"
   - type: kafka
     name: "kafka"
     brokers: "mykafka:9092,mykafka2:9092"
